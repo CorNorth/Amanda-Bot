@@ -1,0 +1,1976 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nursing Active Learning Assignment Generator</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #2D5D7B;
+            --secondary: #5D8AA8;
+            --accent: #FF7F50;
+            --light: #F5F5F5;
+            --dark: #333333;
+            --success: #4CAF50;
+            --warning: #FFC107;
+            --danger: #F44336;
+            --border-radius: 8px;
+            --box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f9f9f9;
+            color: var(--dark);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            background-color: var(--primary);
+            color: white;
+            padding: 20px 0;
+            margin-bottom: 30px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+        }
+
+        header .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .tagline {
+            font-size: 16px;
+            opacity: 0.9;
+        }
+
+        main {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .card {
+            background-color: white;
+            border-radius: var(--border-radius);
+            padding: 25px;
+            box-shadow: var(--box-shadow);
+            margin-bottom: 20px;
+        }
+
+        h1, h2, h3 {
+            color: var(--primary);
+            margin-bottom: 15px;
+        }
+
+        h1 {
+            font-size: 28px;
+        }
+
+        h2 {
+            font-size: 22px;
+            border-bottom: 2px solid var(--secondary);
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+
+        h3 {
+            font-size: 18px;
+            margin-top: 25px;
+        }
+
+        p {
+            margin-bottom: 15px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        input, textarea, select {
+            width: 100%;
+            padding: 10px 15px;
+            border: 1px solid #ddd;
+            border-radius: var(--border-radius);
+            font-size: 16px;
+            transition: var(--transition);
+        }
+
+        input:focus, textarea:focus, select:focus {
+            outline: none;
+            border-color: var(--secondary);
+            box-shadow: 0 0 0 2px rgba(93, 138, 168, 0.2);
+        }
+
+        textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        .checkbox-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin: 10px 0;
+        }
+
+        .checkbox-container {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+            width: 48%;
+        }
+
+        .checkbox-container input[type="checkbox"] {
+            width: auto;
+            margin-right: 8px;
+        }
+
+        button {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 500;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        button:hover {
+            background-color: #1e4b69;
+            transform: translateY(-2px);
+        }
+
+        button:disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        button i {
+            margin-right: 8px;
+        }
+
+        .btn-secondary {
+            background-color: var(--secondary);
+        }
+
+        .btn-secondary:hover {
+            background-color: #4c7991;
+        }
+
+        .btn-accent {
+            background-color: var(--accent);
+        }
+
+        .btn-accent:hover {
+            background-color: #e86a40;
+        }
+
+        .file-input-container {
+            position: relative;
+            overflow: hidden;
+            display: inline-block;
+            cursor: pointer;
+        }
+
+        .file-input-container input[type="file"] {
+            position: absolute;
+            font-size: 100px;
+            right: 0;
+            top: 0;
+            opacity: 0;
+            cursor: pointer;
+        }
+
+        .file-name {
+            margin-top: 10px;
+            font-size: 14px;
+            color: var(--secondary);
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            margin-right: 10px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s ease-in-out infinite;
+            display: none;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .loading .spinner {
+            display: inline-block;
+        }
+
+        .alert {
+            padding: 15px;
+            border-radius: var(--border-radius);
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        .alert-success {
+            background-color: rgba(76, 175, 80, 0.1);
+            color: var(--success);
+            border: 1px solid var(--success);
+        }
+
+        .alert-warning {
+            background-color: rgba(255, 193, 7, 0.1);
+            color: var(--warning);
+            border: 1px solid var(--warning);
+        }
+
+        .alert-danger {
+            background-color: rgba(244, 67, 54, 0.1);
+            color: var(--danger);
+            border: 1px solid var(--danger);
+        }
+
+        .nav-tabs {
+            display: flex;
+            border-bottom: 1px solid #ddd;
+            margin-bottom: 20px;
+        }
+
+        .nav-tab {
+            padding: 10px 20px;
+            cursor: pointer;
+            border: 1px solid transparent;
+            border-bottom: none;
+            border-radius: 4px 4px 0 0;
+            margin-right: 5px;
+            background-color: #f5f5f5;
+            transition: var(--transition);
+        }
+
+        .nav-tab.active {
+            background-color: white;
+            border-color: #ddd;
+            color: var(--primary);
+            font-weight: 500;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .loading-indicator {
+            text-align: center;
+            padding: 40px;
+            display: none;
+        }
+
+        .loading-indicator .spinner-large {
+            width: 50px;
+            height: 50px;
+            margin: 0 auto 20px;
+            border: 5px solid rgba(45, 93, 123, 0.2);
+            border-radius: 50%;
+            border-top-color: var(--primary);
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        .results-container {
+            display: none;
+        }
+
+        .domain-filter {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .domain-filter button {
+            background-color: white;
+            color: var(--primary);
+            border: 1px solid var(--primary);
+            padding: 8px 15px;
+            font-size: 14px;
+        }
+
+        .domain-filter button.active {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        .assignment-card {
+            background-color: white;
+            border-radius: var(--border-radius);
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: var(--box-shadow);
+            border-left: 5px solid var(--secondary);
+            transition: var(--transition);
+            position: relative;
+        }
+
+        .assignment-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .assignment-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 15px;
+        }
+
+        .domain-badge {
+            background-color: var(--primary);
+            color: white;
+            border-radius: 20px;
+            padding: 5px 12px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .competency-badges {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 15px;
+        }
+
+        .competency-badge {
+            background-color: rgba(93, 138, 168, 0.1);
+            color: var(--secondary);
+            border: 1px solid var(--secondary);
+            border-radius: 20px;
+            padding: 3px 10px;
+            font-size: 12px;
+        }
+
+        .assignment-title {
+            margin-bottom: 10px;
+            color: var(--primary);
+            font-size: 20px;
+        }
+
+        .assignment-description {
+            margin-bottom: 15px;
+        }
+
+        .expandable {
+            max-height: 100px;
+            overflow: hidden;
+            position: relative;
+            transition: max-height 0.5s ease;
+        }
+
+        .expandable.expanded {
+            max-height: 1000px;
+        }
+
+        .expandable-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 50px;
+            background: linear-gradient(to bottom, rgba(255, 255, 255, 0), rgba(255, 255, 255, 1));
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+
+        .expandable.expanded .expandable-overlay {
+            opacity: 0;
+        }
+
+        .expand-btn {
+            background: none;
+            color: var(--secondary);
+            border: none;
+            padding: 5px 0;
+            font-size: 14px;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+        }
+
+        .expand-btn:hover {
+            color: var(--primary);
+            background: none;
+            transform: none;
+        }
+
+        .expand-btn i {
+            margin-left: 5px;
+            transition: transform 0.3s ease;
+        }
+
+        .expanded .expand-btn i {
+            transform: rotate(180deg);
+        }
+
+        .assignment-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin-top: 20px;
+            padding-top: 15px;
+            border-top: 1px solid #eee;
+            font-size: 14px;
+        }
+
+        .meta-item {
+            display: flex;
+            align-items: center;
+        }
+
+        .meta-item i {
+            margin-right: 5px;
+            color: var(--secondary);
+        }
+
+        .select-checkbox {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            transform: scale(1.3);
+        }
+
+        .select-all-container {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+            font-weight: 500;
+        }
+
+        .select-all-container input {
+            margin-right: 10px;
+            transform: scale(1.2);
+            width: auto;
+        }
+
+        .generate-rubric-btn {
+            background-color: var(--accent);
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        .generate-rubric-btn:hover {
+            background-color: #e86a40;
+        }
+
+        .btn-print {
+            background-color: var(--secondary);
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            font-size: 14px;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        .btn-print:hover {
+            background-color: #4c7991;
+        }
+
+        .competency-level {
+            display: inline-block;
+            padding: 3px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            margin-left: 10px;
+        }
+
+        .level-developing {
+            background-color: rgba(255, 193, 7, 0.1);
+            color: #d4a000;
+            border: 1px solid #ffc107;
+        }
+
+        .level-developed {
+            background-color: rgba(76, 175, 80, 0.1);
+            color: #2e8b57;
+            border: 1px solid #4CAF50;
+        }
+
+        .level-transition {
+            background-color: rgba(255, 127, 80, 0.1);
+            color: #ff6347;
+            border: 1px solid #FF7F50;
+        }
+
+        .custom-methods-container {
+            margin-top: 10px;
+        }
+
+        .custom-method-input {
+            display: flex;
+            margin-bottom: 10px;
+        }
+
+        .custom-method-input input {
+            flex-grow: 1;
+            margin-right: 10px;
+        }
+
+        .custom-method-input button {
+            background-color: var(--secondary);
+            padding: 8px 15px;
+        }
+
+        .custom-method-input button:hover {
+            background-color: #4c7991;
+        }
+
+        .custom-methods-list {
+            margin-top: 10px;
+        }
+
+        .custom-method-tag {
+            display: inline-flex;
+            align-items: center;
+            background-color: #f0f8ff;
+            border: 1px solid var(--secondary);
+            border-radius: 20px;
+            padding: 5px 12px;
+            margin-right: 10px;
+            margin-bottom: 10px;
+            font-size: 14px;
+        }
+
+        .custom-method-tag .remove-method {
+            margin-left: 8px;
+            cursor: pointer;
+            color: var(--secondary);
+        }
+
+        .custom-method-tag .remove-method:hover {
+            color: var(--danger);
+        }
+
+        /* Modal styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+
+        .modal-content {
+            background-color: white;
+            margin: 5% auto;
+            padding: 30px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--box-shadow);
+            width: 80%;
+            max-width: 900px;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .close-modal {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .close-modal:hover {
+            color: var(--dark);
+        }
+
+        .rubric-container {
+            margin-top: 20px;
+        }
+
+        .rubric-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+
+        .rubric-table th, .rubric-table td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+
+        .rubric-table th {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        .rubric-table tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        .download-rubric-btn {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            margin-top: 20px;
+        }
+
+        .download-rubric-btn:hover {
+            background-color: #1e4b69;
+        }
+
+        .instructions-panel {
+            background-color: rgba(45, 93, 123, 0.05);
+            border-radius: var(--border-radius);
+            padding: 20px;
+            margin-bottom: 20px;
+            border-left: 5px solid var(--primary);
+        }
+
+        .instructions-panel h3 {
+            color: var(--primary);
+            margin-top: 0;
+        }
+
+        .instructions-panel ol {
+            padding-left: 20px;
+        }
+
+        .instructions-panel li {
+            margin-bottom: 10px;
+        }
+
+        .domain-description {
+            margin-bottom: 15px;
+            font-style: italic;
+            color: #666;
+        }
+
+        footer {
+            background-color: var(--primary);
+            color: white;
+            padding: 20px 0;
+            margin-top: 50px;
+            border-radius: var(--border-radius);
+            text-align: center;
+        }
+
+        @media (max-width: 768px) {
+            .checkbox-container {
+                width: 100%;
+            }
+        }
+
+        @media print {
+            header, .input-form, .domain-filter, .btn-print, footer, .expand-btn, .expandable-overlay,
+            .select-checkbox, .select-all-container, .generate-rubric-btn {
+                display: none !important;
+            }
+
+            .results-container {
+                display: block !important;
+            }
+
+            .expandable {
+                max-height: none !important;
+                overflow: visible !important;
+            }
+
+            .container {
+                width: 100% !important;
+                max-width: none !important;
+                padding: 0 !important;
+            }
+
+            body {
+                font-size: 12pt;
+                background-color: white !important;
+            }
+
+            .assignment-card {
+                break-inside: avoid;
+                page-break-inside: avoid;
+                border: 1px solid #ddd !important;
+                box-shadow: none !important;
+            }
+            
+            .rubric-table {
+                page-break-inside: avoid;
+                border-collapse: collapse;
+                width: 100%;
+            }
+            
+            .rubric-table th, .rubric-table td {
+                border: 1px solid #000;
+                padding: 8px;
+                font-size: 10pt;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="logo">Nursing Active Learning Assignment Generator</div>
+            <div class="tagline">Transform your syllabus into engaging competency-based assignments</div>
+        </div>
+    </header>
+
+    <div class="container">
+        <main>
+            <div class="card input-form">
+                <h2>Generate Assignments</h2>
+                
+                <div class="instructions-panel">
+                    <h3>How to Use This Tool</h3>
+                    <ol>
+                        <li>Enter your course details or upload a syllabus document</li>
+                        <li>Select the nursing competency domains you want to focus on</li>
+                        <li>Choose your preferred teaching methods</li>
+                        <li>Click "Generate Assignments" to receive customized active learning assignments</li>
+                    </ol>
+                </div>
+
+                <div class="nav-tabs">
+                    <div class="nav-tab active" data-tab="manual-input">Manual Input</div>
+                    <div class="nav-tab" data-tab="syllabus-upload">Syllabus Upload</div>
+                </div>
+
+                <div class="tab-content active" id="manual-input">
+                    <div class="form-group">
+                        <label for="course-title">Course Title</label>
+                        <input type="text" id="course-title" placeholder="e.g., Fundamentals of Nursing Practice">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="course-description">Course Description/Objectives</label>
+                        <textarea id="course-description" placeholder="Describe your course and list key learning objectives..."></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="student-level">Student Level</label>
+                        <select id="student-level">
+                            <option value="">Select level</option>
+                            <option value="freshman">Freshman</option>
+                            <option value="sophomore">Sophomore</option>
+                            <option value="junior">Junior</option>
+                            <option value="senior">Senior</option>
+                            <option value="graduate">Graduate</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="course-duration">Course Duration</label>
+                        <select id="course-duration">
+                            <option value="">Select duration</option>
+                            <option value="semester">Full Semester (15 weeks)</option>
+                            <option value="quarter">Quarter (10 weeks)</option>
+                            <option value="8-week">8-Week Module</option>
+                            <option value="6-week">6-Week Module</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="tab-content" id="syllabus-upload">
+                    <div class="form-group">
+                        <label for="syllabus-file">Upload Syllabus Document (PDF, DOCX, or TXT)</label>
+                        <div class="file-input-container">
+                            <button type="button" class="btn-secondary" id="file-select-btn">
+                                <i class="fas fa-upload"></i> Choose File
+                            </button>
+                            <input type="file" id="syllabus-file" accept=".pdf,.docx,.doc,.txt">
+                        </div>
+                        <div class="file-name" id="file-name">No file chosen</div>
+                    </div>
+                    
+                    <div class="alert alert-success" id="upload-success" style="display: none;">
+                        Syllabus uploaded successfully! The extracted information has been populated in the form. You can proceed to generate assignments.
+                    </div>
+                    
+                    <div class="btn-group">
+                        <button type="button" id="process-syllabus-btn" class="btn-primary" disabled>
+                            <span class="spinner"></span>
+                            <i class="fas fa-cogs"></i> Process Syllabus
+                        </button>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Select Nursing Competency Domains</label>
+                    <div class="checkbox-group">
+                        <div class="checkbox-container">
+                            <input type="checkbox" id="domain1" value="1">
+                            <label for="domain1">Domain 1: Knowledge for Nursing Practice</label>
+                        </div>
+                        <div class="checkbox-container">
+                            <input type="checkbox" id="domain2" value="2">
+                            <label for="domain2">Domain 2: Person-Centered Care</label>
+                        </div>
+                        <div class="checkbox-container">
+                            <input type="checkbox" id="domain3" value="3">
+                            <label for="domain3">Domain 3: Population Health</label>
+                        </div>
+                        <div class="checkbox-container">
+                            <input type="checkbox" id="domain4" value="4">
+                            <label for="domain4">Domain 4: Scholarship for Nursing Practice</label>
+                        </div>
+                        <div class="checkbox-container">
+                            <input type="checkbox" id="domain5" value="5">
+                            <label for="domain5">Domain 5: Quality and Safety</label>
+                        </div>
+                        <div class="checkbox-container">
+                            <input type="checkbox" id="domain6" value="6">
+                            <label for="domain6">Domain 6: Interprofessional Partnerships</label>
+                        </div>
+                        <div class="checkbox-container">
+                            <input type="checkbox" id="domain7" value="7">
+                            <label for="domain7">Domain 7: Systems-Based Practice</label>
+                        </div>
+                        <div class="checkbox-container">
+                            <input type="checkbox" id="domain8" value="8">
+                            <label for="domain8">Domain 8: Informatics and Healthcare Technologies</label>
+                        </div>
+                        <div class="checkbox-container">
+                            <input type="checkbox" id="domain9" value="9">
+                            <label for="domain9">Domain 9: Professionalism</label>
+                        </div>
+                        <div class="checkbox-container">
+                            <input type="checkbox" id="domain10" value="10">
+                            <label for="domain10">Domain 10: Personal, Professional, and Leadership Development</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Preferred Teaching Methods</label>
+                    <div class="checkbox-group">
+                        <div class="checkbox-container">
+                            <input type="checkbox" id="method-case" value="case">
+                            <label for="method-case">Case Studies</label>
+                        </div>
+                        <div class="checkbox-container">
+                            <input type="checkbox" id="method-simulation" value="simulation">
+                            <label for="method-simulation">Simulation</label>
+                        </div>
+                        <div class="checkbox-container">
+                            <input type="checkbox" id="method-reflective" value="reflective">
+                            <label for="method-reflective">Reflective Practice</label>
+                        </div>
+                        <div class="checkbox-container">
+                            <input type="checkbox" id="method-collaborative" value="collaborative">
+                            <label for="method-collaborative">Collaborative Learning</label>
+                        </div>
+                        <div class="checkbox-container">
+                            <input type="checkbox" id="method-problem" value="problem">
+                            <label for="method-problem">Problem-Based Learning</label>
+                        </div>
+                        <div class="checkbox-container">
+                            <input type="checkbox" id="method-service" value="service">
+                            <label for="method-service">Service Learning</label>
+                        </div>
+                        <div class="checkbox-container">
+                            <input type="checkbox" id="method-project" value="project">
+                            <label for="method-project">Project-Based Learning</label>
+                        </div>
+                    </div>
+                    
+                    <div class="custom-methods-container">
+                        <label>Add Custom Teaching Methods</label>
+                        <div class="custom-method-input">
+                            <input type="text" id="custom-method" placeholder="Enter custom teaching method...">
+                            <button type="button" id="add-custom-method">Add</button>
+                        </div>
+                        <div class="custom-methods-list" id="custom-methods-list">
+                            <!-- Custom methods will be added here -->
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Competency Level Focus</label>
+                    <div class="checkbox-group">
+                        <div class="checkbox-container">
+                            <input type="checkbox" id="level-developing" value="developing">
+                            <label for="level-developing">Developing Competence</label>
+                        </div>
+                        <div class="checkbox-container">
+                            <input type="checkbox" id="level-transition" value="transition">
+                            <label for="level-transition">Transition from Developing to Developed</label>
+                        </div>
+                        <div class="checkbox-container">
+                            <input type="checkbox" id="level-developed" value="developed">
+                            <label for="level-developed">Developed Competence</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="additional-info">Additional Information (Optional)</label>
+                    <textarea id="additional-info" placeholder="Add any other details about your course or specific requirements..."></textarea>
+                </div>
+
+                <div class="alert alert-danger" id="error-alert">
+                    Please fill in the required fields (Course Title and Description or upload a syllabus) and select at least one domain, teaching method, and competency level.
+                </div>
+
+                <div class="btn-group">
+                    <button type="button" id="generate-btn" class="btn-primary">
+                        <span class="spinner"></span>
+                        <i class="fas fa-magic"></i> Generate Assignments
+                    </button>
+                    <button type="button" id="reset-btn" class="btn-secondary">
+                        <i class="fas fa-redo"></i> Reset
+                    </button>
+                </div>
+            </div>
+
+            <div class="loading-indicator" id="loading-indicator">
+                <div class="spinner-large"></div>
+                <p>Analyzing your input and generating assignments...</p>
+                <p>This may take a moment</p>
+            </div>
+
+            <div class="results-container" id="results-container">
+                <h2>Generated Assignments</h2>
+                <p class="results-summary">Based on your input, we've generated <span id="assignment-count">0</span> assignment ideas across <span id="domain-count">0</span> nursing competency domains.</p>
+                
+                <button class="btn-print" id="print-btn">
+                    <i class="fas fa-print"></i> Print Results
+                </button>
+                
+                <div class="select-all-container">
+                    <input type="checkbox" id="select-all-assignments">
+                    <label for="select-all-assignments">Select All Assignments</label>
+                </div>
+                
+                <button class="generate-rubric-btn" id="generate-rubric-btn">
+                    <i class="fas fa-table"></i> Generate Rubrics for Selected Assignments
+                </button>
+                
+                <div class="domain-filter" id="domain-filter">
+                    <button class="active" data-domain="all">All Domains</button>
+                    <!-- Domain filter buttons will be added dynamically -->
+                </div>
+
+                <div id="assignments-list">
+                    <!-- Assignment cards will be inserted here -->
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <div id="rubric-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal" id="close-rubric-modal">&times;</span>
+            <h2>Generated Rubrics</h2>
+            <p>Below are the rubrics for your selected assignments. You can customize these rubrics further based on your course needs.</p>
+            
+            <div id="rubric-container" class="rubric-container">
+                <!-- Rubrics will be inserted here -->
+            </div>
+            
+            <button id="download-rubric-btn" class="download-rubric-btn">
+                <i class="fas fa-download"></i> Download Rubrics (PDF)
+            </button>
+        </div>
+    </div>
+
+    <footer>
+        <div class="container">
+            <p>© 2023 Nursing Active Learning Assignment Generator | Designed to support nursing educators</p>
+        </div>
+    </footer>
+
+    <script>
+        // DOM elements
+        const navTabs = document.querySelectorAll('.nav-tab');
+        const tabContents = document.querySelectorAll('.tab-content');
+        const syllabusFile = document.getElementById('syllabus-file');
+        const fileName = document.getElementById('file-name');
+        const fileSelectBtn = document.getElementById('file-select-btn');
+        const processSyllabusBtn = document.getElementById('process-syllabus-btn');
+        const generateBtn = document.getElementById('generate-btn');
+        const resetBtn = document.getElementById('reset-btn');
+        const errorAlert = document.getElementById('error-alert');
+        const loadingIndicator = document.getElementById('loading-indicator');
+        const resultsContainer = document.getElementById('results-container');
+        const assignmentsList = document.getElementById('assignments-list');
+        const assignmentCount = document.getElementById('assignment-count');
+        const domainCount = document.getElementById('domain-count');
+        const domainFilter = document.getElementById('domain-filter');
+        const printBtn = document.getElementById('print-btn');
+        const selectAllCheckbox = document.getElementById('select-all-assignments');
+        const generateRubricBtn = document.getElementById('generate-rubric-btn');
+        const rubricModal = document.getElementById('rubric-modal');
+        const closeRubricModal = document.getElementById('close-rubric-modal');
+        const rubricContainer = document.getElementById('rubric-container');
+        const downloadRubricBtn = document.getElementById('download-rubric-btn');
+        const customMethodInput = document.getElementById('custom-method');
+        const addCustomMethodBtn = document.getElementById('add-custom-method');
+        const customMethodsList = document.getElementById('custom-methods-list');
+        const uploadSuccess = document.getElementById('upload-success');
+
+        // Domain descriptions for reference
+        const domainDescriptions = {
+            1: "Knowledge for Nursing Practice focuses on the integration of nursing and other disciplines' knowledge to inform clinical judgment.",
+            2: "Person-Centered Care emphasizes therapeutic relationships and individualized care approaches that respect preferences and values.",
+            3: "Population Health addresses community-level health needs, social determinants of health, and population-specific interventions.",
+            4: "Scholarship for Nursing Practice involves the application of evidence, research, and knowledge translation to improve practice.",
+            5: "Quality and Safety concentrates on promoting a culture of safety and implementing quality improvement processes.",
+            6: "Interprofessional Partnerships focuses on collaborative team relationships to optimize patient care outcomes.",
+            7: "Systems-Based Practice involves understanding healthcare systems and applying systems thinking to nursing practice.",
+            8: "Informatics and Healthcare Technologies addresses the use of information and technology to support patient care and communication.",
+            9: "Professionalism encompasses ethical comportment, accountability, and professional identity in nursing practice.",
+            10: "Personal, Professional, and Leadership Development focuses on self-care, inquiry, and leadership capacity building."
+        };
+
+        // Sample assignment ideas database (would be more extensive in a real application)
+        const assignmentIdeas = [
+            {
+                id: 1,
+                title: "Concept Mapping for Clinical Decision-Making",
+                domain: 1,
+                subCompetencies: ["1.1c", "1.2a", "1.3b"],
+                level: "developing",
+                description: "Students create concept maps to visualize relationships between patient data, nursing diagnoses, and interventions. Beginning with a simple patient scenario, students identify key assessment data and map connections to potential nursing diagnoses and interventions, with emphasis on theoretical frameworks that guide clinical decisions.",
+                learningObjectives: [
+                    "Apply nursing theory concepts to clinical situations",
+                    "Identify relationships between assessment data and nursing diagnoses",
+                    "Visualize the clinical reasoning process through concept mapping"
+                ],
+                teachingMethods: ["case", "reflective"],
+                timeRequired: "2-3 hours",
+                assessmentApproach: "Rubric evaluating accuracy of connections, theoretical application, and clinical reasoning"
+            },
+            {
+                id: 2,
+                title: "Evidence-Based Practice Proposal",
+                domain: 1,
+                subCompetencies: ["1.1e", "1.2b", "1.2f"],
+                level: "developed",
+                description: "Students identify a clinical practice issue, conduct a literature review of current evidence, and develop a proposal for implementing an evidence-based practice change. The proposal includes background information on the issue, summary of evidence, implementation plan, and evaluation methods.",
+                learningObjectives: [
+                    "Translate evidence from nursing and other sciences into practice",
+                    "Demonstrate intellectual curiosity through literature exploration",
+                    "Synthesize knowledge from nursing and other disciplines"
+                ],
+                teachingMethods: ["project", "problem"],
+                timeRequired: "Multi-week project",
+                assessmentApproach: "Staged evaluation of literature review, proposal development, and final presentation"
+            },
+            {
+                id: 3,
+                title: "Therapeutic Communication Simulation",
+                domain: 2,
+                subCompetencies: ["2.1a", "2.1b", "2.2a"],
+                level: "developing",
+                description: "Students participate in a recorded simulation where they practice therapeutic communication techniques with a standardized patient. Scenarios focus on establishing rapport, demonstrating empathy, and gathering psychosocial information. Students review their recordings for self-assessment and receive peer and instructor feedback.",
+                learningObjectives: [
+                    "Demonstrate qualities of empathy in patient interactions",
+                    "Use appropriate verbal and non-verbal communication techniques",
+                    "Apply relationship-centered care principles in practice"
+                ],
+                teachingMethods: ["simulation", "reflective"],
+                timeRequired: "90-minute session plus reflection",
+                assessmentApproach: "Communication technique checklist and reflective analysis"
+            },
+            {
+                id: 4,
+                title: "Cultural Sensitivity Assessment Integration",
+                domain: 2,
+                subCompetencies: ["2.2b", "2.3a", "2.3f"],
+                level: "transition",
+                description: "Students research a specific cultural group and develop a culturally-sensitive assessment approach. They then apply this approach in a simulated patient encounter with a standardized patient from the selected cultural background, adapting their communication and assessment techniques to accommodate cultural preferences and values.",
+                learningObjectives: [
+                    "Adapt assessment techniques to align with cultural values and beliefs",
+                    "Create an environment that promotes culturally-sensitive interaction",
+                    "Apply nursing knowledge to gain a holistic perspective"
+                ],
+                teachingMethods: ["simulation", "case"],
+                timeRequired: "Research component (1 week) plus 2-hour simulation",
+                assessmentApproach: "Cultural competence rubric and patient feedback"
+            },
+            {
+                id: 5,
+                title: "Comprehensive Care Plan Development",
+                domain: 2,
+                subCompetencies: ["2.4a", "2.5a", "2.5b", "2.5d"],
+                level: "developed",
+                description: "Students develop a comprehensive, patient-centered care plan for a complex case scenario involving multiple health concerns and psychosocial factors. They must integrate the patient's preferences, values, and cultural background into the care plan while incorporating evidence-based interventions and addressing potential barriers to implementation.",
+                learningObjectives: [
+                    "Synthesize assessment data with patient preferences",
+                    "Engage the patient in collaborative care planning",
+                    "Incorporate evidence-based interventions while respecting patient values"
+                ],
+                teachingMethods: ["case", "collaborative"],
+                timeRequired: "3-4 hours",
+                assessmentApproach: "Comprehensive rubric evaluating integration of preferences, evidence-based practices, and feasibility"
+            },
+            {
+                id: 6,
+                title: "Community Health Needs Assessment",
+                domain: 3,
+                subCompetencies: ["3.1a", "3.1b", "3.1c"],
+                level: "developing",
+                description: "Students conduct a focused community assessment to identify health needs of a specific population. They collect demographic, socioeconomic, and health data from public sources, then analyze this information to identify key health concerns and contributing factors.",
+                learningObjectives: [
+                    "Define characteristics of a target population",
+                    "Assess population health data from multiple sources",
+                    "Identify health priorities within a community"
+                ],
+                teachingMethods: ["project", "collaborative"],
+                timeRequired: "2-3 weeks",
+                assessmentApproach: "Data collection thoroughness, analysis quality, and presentation of findings"
+            },
+            {
+                id: 7,
+                title: "Health Promotion Program Development",
+                domain: 3,
+                subCompetencies: ["3.1f", "3.2d", "3.3b"],
+                level: "developed",
+                description: "Students design a comprehensive health promotion program for a specific community or population based on assessed needs. The program includes clear objectives, evidence-based interventions, implementation strategies, resource requirements, and evaluation methods. Students present their programs to community stakeholders for feedback.",
+                learningObjectives: [
+                    "Develop an action plan to address identified health needs",
+                    "Collaborate with stakeholders to improve population health",
+                    "Prioritize cost-effective, accessible interventions"
+                ],
+                teachingMethods: ["project", "service"],
+                timeRequired: "4-6 weeks",
+                assessmentApproach: "Comprehensive evaluation of program components, evidence base, and feasibility"
+            },
+            {
+                id: 8,
+                title: "Research Article Critique",
+                domain: 4,
+                subCompetencies: ["4.1a", "4.1b", "4.1f"],
+                level: "developing",
+                description: "Students select a research article relevant to a clinical topic and conduct a structured critique analyzing the research methods, findings, strengths, limitations, and implications for nursing practice. They identify the level of evidence represented and discuss how the findings could influence clinical decision-making.",
+                learningObjectives: [
+                    "Demonstrate understanding of research methods",
+                    "Apply criteria for evaluating different levels of evidence",
+                    "Evaluate research for clinical applicability"
+                ],
+                teachingMethods: ["reflective"],
+                timeRequired: "3-4 hours",
+                assessmentApproach: "Structured critique rubric evaluating comprehension, analysis, and application"
+            },
+            {
+                id: 9,
+                title: "Evidence Implementation Project",
+                domain: 4,
+                subCompetencies: ["4.2a", "4.2c", "4.2d", "4.2h"],
+                level: "developed",
+                description: "Students identify a clinical practice issue, review current evidence, and develop a detailed plan for implementing an evidence-based practice change. The project includes stakeholder analysis, implementation strategies, potential barriers, and evaluation methods. Students create materials needed for implementation and present their projects to clinical partners.",
+                learningObjectives: [
+                    "Generate clinical questions based on practice observation",
+                    "Apply best evidence to improve nursing practice",
+                    "Develop strategies for practice change implementation",
+                    "Address opportunities for innovation in practice"
+                ],
+                teachingMethods: ["project", "problem"],
+                timeRequired: "Semester-long project",
+                assessmentApproach: "Comprehensive evaluation of evidence quality, implementation plan, and presentation"
+            },
+            {
+                id: 10,
+                title: "Safety Hazard Identification Exercise",
+                domain: 5,
+                subCompetencies: ["5.1a", "5.2a", "5.2c"],
+                level: "developing",
+                description: "Students review a clinical scenario or video depicting a patient care situation and identify potential safety hazards or risks. They categorize these hazards according to national safety standards and recommend interventions to mitigate each identified risk.",
+                learningObjectives: [
+                    "Recognize nursing's role in safety and quality",
+                    "Identify factors that create a culture of safety",
+                    "Apply basic safety design principles"
+                ],
+                teachingMethods: ["case", "collaborative"],
+                timeRequired: "60-90 minutes",
+                assessmentApproach: "Hazard identification checklist and mitigation strategy evaluation"
+            },
+            {
+                id: 11,
+                title: "Root Cause Analysis Simulation",
+                domain: 5,
+                subCompetencies: ["5.2d", "5.2e", "5.2i"],
+                level: "developed",
+                description: "Students participate in a simulated root cause analysis for a safety event or near miss. Working in teams, they analyze contributing factors, system issues, and human factors using structured RCA methodology. They develop action plans to address identified causes and prevent similar events in the future.",
+                learningObjectives: [
+                    "Assume accountability for reporting safety concerns",
+                    "Apply processes for understanding causes of error",
+                    "Design evidence-based interventions to mitigate risk"
+                ],
+                teachingMethods: ["simulation", "collaborative", "problem"],
+                timeRequired: "3-hour workshop",
+                assessmentApproach: "Process analysis, identification of contributing factors, and action plan development"
+            },
+            {
+                id: 12,
+                title: "Interprofessional Role Analysis",
+                domain: 6,
+                subCompetencies: ["6.1a", "6.2a", "6.3a"],
+                level: "developing",
+                description: "Students research and analyze the roles, responsibilities, and contributions of different healthcare professions within a healthcare team. They create role profiles describing each profession's scope of practice, education, and unique contributions to patient care, then present these profiles in a team discussion format.",
+                learningObjectives: [
+                    "Communicate nursing roles and responsibilities clearly",
+                    "Apply principles of team dynamics",
+                    "Integrate roles and responsibilities through collaboration"
+                ],
+                teachingMethods: ["collaborative", "reflective"],
+                timeRequired: "2 hours plus preparation",
+                assessmentApproach: "Accuracy of role descriptions and analysis of team contributions"
+            },
+            {
+                id: 13,
+                title: "Interprofessional Team Simulation",
+                domain: 6,
+                subCompetencies: ["6.2b", "6.3b", "6.4c", "6.4d"],
+                level: "developed",
+                description: "Students participate in a high-fidelity simulation with students from other healthcare disciplines (e.g., medicine, pharmacy, social work). They collaborate to assess, plan, and implement care for a complex patient scenario, practicing effective communication, role clarity, and conflict resolution strategies.",
+                learningObjectives: [
+                    "Delegate work based on team members' roles and competency",
+                    "Leverage roles and abilities of team members to optimize care",
+                    "Engage in constructive communication for conflict management",
+                    "Establish mutual healthcare goals through collaboration"
+                ],
+                teachingMethods: ["simulation", "collaborative"],
+                timeRequired: "4-hour session including debriefing",
+                assessmentApproach: "Team functioning evaluation, communication assessment, and outcome achievement"
+            },
+            {
+                id: 14,
+                title: "Healthcare System Analysis",
+                domain: 7,
+                subCompetencies: ["7.1a", "7.1b", "7.1c"],
+                level: "developing",
+                description: "Students research and analyze a healthcare organization's structure, mission, vision, and values. They identify the relationships between macrosystems, mesosystems, and microsystems within the organization and discuss how these relationships influence patient care delivery.",
+                learningObjectives: [
+                    "Describe organizational structure and its influence on care",
+                    "Explain relationships between system levels",
+                    "Differentiate between healthcare delivery environments"
+                ],
+                teachingMethods: ["project", "reflective"],
+                timeRequired: "1-2 weeks",
+                assessmentApproach: "System analysis paper and presentation"
+            },
+            {
+                id: 15,
+                title: "Care Transition Improvement Project",
+                domain: 7,
+                subCompetencies: ["7.1d", "7.1f", "7.2c", "7.2d"],
+                level: "developed",
+                description: "Students analyze the care transition process between healthcare settings (e.g., hospital to home, ED to inpatient). They identify potential gaps, inefficiencies, and risks during transitions, then develop evidence-based recommendations for improving the transition process, addressing both system and patient factors.",
+                learningObjectives: [
+                    "Recognize factors that impact care transitions",
+                    "Participate in system-wide improvement initiatives",
+                    "Consider cost-effectiveness and quality in care delivery",
+                    "Explain how policy, regulation, and economics affect outcomes"
+                ],
+                teachingMethods: ["project", "problem"],
+                timeRequired: "3-4 weeks",
+                assessmentApproach: "Process analysis quality, recommendation feasibility, and evidence integration"
+            },
+            {
+                id: 16,
+                title: "Healthcare Technology Evaluation",
+                domain: 8,
+                subCompetencies: ["8.1a", "8.1b", "8.1f"],
+                level: "developing",
+                description: "Students evaluate a specific healthcare technology tool (e.g., EHR module, mobile health app, telehealth platform) for its functionality, usability, and potential impact on patient care. They identify strengths, limitations, and recommendations for optimal use in clinical settings.",
+                learningObjectives: [
+                    "Identify information and communication technologies used in care",
+                    "Explain concepts of electronic health, mobile health, and telehealth systems",
+                    "Recognize the importance of nursing engagement in technology selection"
+                ],
+                teachingMethods: ["project", "reflective"],
+                timeRequired: "1-2 weeks",
+                assessmentApproach: "Technology evaluation rubric and presentation quality"
+            },
+            {
+                id: 17,
+                title: "Telehealth Implementation Plan",
+                domain: 8,
+                subCompetencies: ["8.3a", "8.3b", "8.3f", "8.4f"],
+                level: "developed",
+                description: "Students develop a comprehensive plan for implementing telehealth services for a specific patient population or clinical service. The plan addresses technology requirements, staff training, patient education, workflow integration, quality metrics, and evaluation methods, with emphasis on ensuring equitable access and maintaining therapeutic relationships.",
+                learningObjectives: [
+                    "Demonstrate appropriate use of information and communication technologies",
+                    "Evaluate decision support tools' impact on clinical judgment",
+                    "Deliver care using remote technology effectively",
+                    "Employ electronic health, mobile health, and telehealth systems"
+                ],
+                teachingMethods: ["project", "case", "problem"],
+                timeRequired: "4-6 weeks",
+                assessmentApproach: "Comprehensive evaluation of implementation plan components and feasibility"
+            },
+            {
+                id: 18,
+                title: "Ethical Decision-Making Case Analysis",
+                domain: 9,
+                subCompetencies: ["9.1a", "9.1c", "9.1d"],
+                level: "developing",
+                description: "Students analyze a case scenario involving an ethical dilemma in nursing practice. They apply ethical principles and professional guidelines to identify key ethical issues, stakeholder perspectives, and potential courses of action. Students justify their recommended approach based on ethical frameworks and professional standards.",
+                learningObjectives: [
+                    "Apply principles of professional nursing ethics",
+                    "Demonstrate ethical behaviors in practice",
+                    "Change behavior based on self and situational awareness"
+                ],
+                teachingMethods: ["case", "reflective"],
+                timeRequired: "2-3 hours",
+                assessmentApproach: "Ethical analysis framework application and decision justification"
+            },
+            {
+                id: 19,
+                title: "Professional Identity Development Portfolio",
+                domain: 9,
+                subCompetencies: ["9.1b", "9.5a", "9.5b", "9.5c", "9.5d"],
+                level: "developed",
+                description: "Students create a comprehensive portfolio documenting their professional identity development throughout the nursing program. The portfolio includes reflections on key learning experiences, analysis of professional values integration, evidence of ethical decision-making, and a professional development plan. Students present their portfolios to faculty and peers for feedback.",
+                learningObjectives: [
+                    "Reflect on actions and their consequences",
+                    "Describe nursing's professional identity and contributions",
+                    "Demonstrate core values of professional nursing",
+                    "Demonstrate sensitivity to others' values",
+                    "Demonstrate ethical comportment and moral courage"
+                ],
+                teachingMethods: ["reflective", "project"],
+                timeRequired: "Ongoing throughout program with formal submission",
+                assessmentApproach: "Portfolio rubric evaluating reflection depth, value integration, and development planning"
+            },
+            {
+                id: 20,
+                title: "Self-Care and Resilience Plan",
+                domain: 10,
+                subCompetencies: ["10.1a", "10.1b", "10.1c"],
+                level: "developing",
+                description: "Students assess their current self-care practices and stress management strategies, then develop a personalized self-care and resilience plan. The plan includes specific strategies for physical, emotional, social, and professional well-being, with emphasis on preventing burnout and maintaining wellness in nursing practice.",
+                learningObjectives: [
+                    "Demonstrate healthy, self-care behaviors that promote wellness",
+                    "Manage conflict between personal and professional responsibilities",
+                    "Contribute to an environment promoting self-care and well-being"
+                ],
+                teachingMethods: ["reflective"],
+                timeRequired: "Initial development (2-3 hours) with ongoing implementation",
+                assessmentApproach: "Plan comprehensiveness, feasibility, and reflection on implementation"
+            },
+            {
+                id: 21,
+                title: "Leadership Philosophy and Initiative Development",
+                domain: 10,
+                subCompetencies: ["10.2g", "10.3b", "10.3c", "10.3k"],
+                level: "developed",
+                description: "Students articulate a personal leadership philosophy based on leadership theories and self-assessment, then design and implement a leadership initiative within an academic or clinical setting. The initiative addresses a specific need or opportunity for improvement, demonstrating the student's leadership approach in action.",
+                learningObjectives: [
+                    "Demonstrate cognitive flexibility in managing change",
+                    "Formulate a personal leadership style",
+                    "Demonstrate leadership behaviors in professional situations",
+                    "Influence intentional change guided by leadership principles"
+                ],
+                teachingMethods: ["project", "collaborative"],
+                timeRequired: "Philosophy development (2 weeks) plus initiative implementation (4-6 weeks)",
+                assessmentApproach: "Philosophy articulation, initiative design, implementation effectiveness, and reflection"
+            }
+        ];
+
+        // Initialize the page
+        document.addEventListener('DOMContentLoaded', () => {
+            // Set default values
+            document.getElementById('domain1').checked = true;
+            document.getElementById('domain2').checked = true;
+            document.getElementById('method-case').checked = true;
+            document.getElementById('method-simulation').checked = true;
+            document.getElementById('level-developing').checked = true;
+            document.getElementById('level-transition').checked = true;
+            
+            // Tab navigation
+            navTabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    const tabId = tab.getAttribute('data-tab');
+                    
+                    // Update active tab
+                    navTabs.forEach(t => t.classList.remove('active'));
+                    tab.classList.add('active');
+                    
+                    // Show corresponding content
+                    tabContents.forEach(content => {
+                        content.classList.remove('active');
+                        if (content.id === tabId) {
+                            content.classList.add('active');
+                        }
+                    });
+                });
+            });
+            
+            // File select button
+            fileSelectBtn.addEventListener('click', () => {
+                syllabusFile.click();
+            });
+            
+            // File input change
+            syllabusFile.addEventListener('change', (e) => {
+                if (e.target.files.length > 0) {
+                    fileName.textContent = e.target.files[0].name;
+                    processSyllabusBtn.disabled = false;
+                } else {
+                    fileName.textContent = 'No file chosen';
+                    processSyllabusBtn.disabled = true;
+                }
+            });
+            
+            // Process syllabus button
+            processSyllabusBtn.addEventListener('click', () => {
+                if (syllabusFile.files.length > 0) {
+                    handleSyllabusUpload(syllabusFile.files[0]);
+                }
+            });
+            
+            // Generate button
+            generateBtn.addEventListener('click', () => {
+                // Validate inputs
+                const courseTitle = document.getElementById('course-title').value;
+                const courseDescription = document.getElementById('course-description').value;
+                const fileSelected = syllabusFile.files.length > 0;
+                
+                const domainSelected = document.querySelectorAll('input[id^="domain"]:checked').length > 0;
+                const methodSelected = document.querySelectorAll('input[id^="method-"]:checked').length > 0 || 
+                                      document.querySelectorAll('.custom-method-tag').length > 0;
+                const levelSelected = document.querySelectorAll('input[id^="level-"]:checked').length > 0;
+                
+                if (((courseTitle === '' || courseDescription === '') && !fileSelected) || 
+                    !domainSelected || !methodSelected || !levelSelected) {
+                    errorAlert.style.display = 'block';
+                    return;
+                }
+                
+                errorAlert.style.display = 'none';
+                
+                // Get selected domains
+                const selectedDomains = [];
+                document.querySelectorAll('input[id^="domain"]:checked').forEach(checkbox => {
+                    selectedDomains.push(parseInt(checkbox.value));
+                });
+                
+                // Get selected teaching methods
+                const selectedMethods = getSelectedTeachingMethods();
+                
+                // Get selected competency levels
+                const selectedLevels = [];
+                document.querySelectorAll('input[id^="level-"]:checked').forEach(checkbox => {
+                    selectedLevels.push(checkbox.value);
+                });
+                
+                // Show loading indicator
+                loadingIndicator.style.display = 'block';
+                generateBtn.classList.add('loading');
+                generateBtn.disabled = true;
+                
+                // Simulate processing time
+                setTimeout(() => {
+                    generateAssignments(selectedDomains, selectedMethods, selectedLevels);
+                    
+                    // Hide loading indicator
+                    loadingIndicator.style.display = 'none';
+                    generateBtn.classList.remove('loading');
+                    generateBtn.disabled = false;
+                    
+                    // Show results
+                    resultsContainer.style.display = 'block';
+                    printBtn.style.display = 'inline-block';
+                    
+                    // Scroll to results
+                    resultsContainer.scrollIntoView({ behavior: 'smooth' });
+                }, 1500);
+            });
+            
+            // Reset button
+            resetBtn.addEventListener('click', () => {
+                document.getElementById('course-title').value = '';
+                document.getElementById('course-description').value = '';
+                document.getElementById('student-level').selectedIndex = 0;
+                document.getElementById('course-duration').selectedIndex = 0;
+                document.getElementById('additional-info').value = '';
+                syllabusFile.value = '';
+                fileName.textContent = 'No file chosen';
+                processSyllabusBtn.disabled = true;
+                uploadSuccess.style.display = 'none';
+                
+                // Reset checkboxes to defaults
+                document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
+                    checkbox.checked = false;
+                });
+                
+                document.getElementById('domain1').checked = true;
+                document.getElementById('domain2').checked = true;
+                document.getElementById('method-case').checked = true;
+                document.getElementById('method-simulation').checked = true;
+                document.getElementById('level-developing').checked = true;
+                document.getElementById('level-transition').checked = true;
+                
+                // Clear custom methods
+                customMethodsList.innerHTML = '';
+                
+                // Hide error alert
+                errorAlert.style.display = 'none';
+                
+                // Hide results
+                resultsContainer.style.display = 'none';
+                printBtn.style.display = 'none';
+            });
+            
+            // Print button
+            printBtn.addEventListener('click', () => {
+                window.print();
+            });
+            
+            // Add custom method
+            addCustomMethodBtn.addEventListener('click', addCustomMethod);
+            customMethodInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    addCustomMethod();
+                }
+            });
+            
+            // Select all assignments
+            selectAllCheckbox.addEventListener('change', () => {
+                document.querySelectorAll('.select-checkbox').forEach(checkbox => {
+                    checkbox.checked = selectAllCheckbox.checked;
+                });
+                updateRubricButtonVisibility();
+            });
+            
+            // Generate rubrics button
+            generateRubricBtn.addEventListener('click', generateRubrics);
+            
+            // Close rubric modal
+            closeRubricModal.addEventListener('click', () => {
+                rubricModal.style.display = 'none';
+            });
+            
+            // Close modal when clicking outside
+            window.addEventListener('click', (e) => {
+                if (e.target === rubricModal) {
+                    rubricModal.style.display = 'none';
+                }
+            });
+            
+            // Download rubric button
+            downloadRubricBtn.addEventListener('click', () => {
+                alert('In a production environment, this would download the rubrics as a PDF file.');
+            });
+        });
+
+        // Function to handle syllabus upload
+        function handleSyllabusUpload(file) {
+            if (!file) return;
+            
+            // Show loading state
+            processSyllabusBtn.classList.add('loading');
+            processSyllabusBtn.disabled = true;
+            
+            // Simulate file processing
+            setTimeout(() => {
+                // Populate form with "extracted" data
+                document.getElementById('course-title').value = file.name.replace(/\.[^/.]+$/, "");
+                document.getElementById('course-description').value = "This course extracted from uploaded syllabus focuses on developing nursing competencies across multiple domains. The course emphasizes evidence-based practice, person-centered care, and professional development.";
+                document.getElementById('student-level').value = "junior";
+                document.getElementById('course-duration').value = "semester";
+                
+                // Select domains based on "content"
+                document.getElementById('domain1').checked = true;
+                document.getElementById('domain2').checked = true;
+                document.getElementById('domain4').checked = true;
+                document.getElementById('domain9').checked = true;
+                
+                // Select teaching methods based on "content"
+                document.getElementById('method-case').checked = true;
+                document.getElementById('method-simulation').checked = true;
+                document.getElementById('method-reflective').checked = true;
+                
+                // Select competency levels based on "content"
+                document.getElementById('level-developing').checked = true;
+                document.getElementById('level-transition').checked = true;
+                
+                // Show success message
+                uploadSuccess.style.display = 'block';
+                
+                // Switch to manual input tab
+                navTabs.forEach(tab => tab.classList.remove('active'));
+                tabContents.forEach(content => content.classList.remove('active'));
+                document.querySelector('[data-tab="manual-input"]').classList.add('active');
+                document.getElementById('manual-input').classList.add('active');
+                
+                // Reset button state
+                processSyllabusBtn.classList.remove('loading');
+                processSyllabusBtn.disabled = false;
+            }, 1500);
+        }
+
+        // Function to add custom teaching method
+        function addCustomMethod() {
+            const methodValue = customMethodInput.value.trim();
+            
+            if (methodValue === '') return;
+            
+            // Create unique ID for the method
+            const methodId = 'custom-' + methodValue.toLowerCase().replace(/\s+/g, '-');
+            
+            // Check if already exists
+            if (document.querySelector(`[data-method-id="${methodId}"]`)) {
+                customMethodInput.value = '';
+                return;
+            }
+            
+            // Create method tag
+            const methodTag = document.createElement('div');
+            methodTag.className = 'custom-method-tag';
+            methodTag.setAttribute('data-method-id', methodId);
+            
+            methodTag.innerHTML = `
+                ${methodValue}
+                <span class="remove-method" data-method-id="${methodId}">&times;</span>
+            `;
+            
+            // Add to list
+            customMethodsList.appendChild(methodTag);
+            
+            // Add event listener to remove button
+            methodTag.querySelector('.remove-method').addEventListener('click', function() {
+                const methodId = this.getAttribute('data-method-id');
+                document.querySelector(`[data-method-id="${methodId}"]`).remove();
+            });
+            
+            // Clear input
+            customMethodInput.value = '';
+        }
+
+        // Function to get selected teaching methods
+        function getSelectedTeachingMethods() {
+            const methods = [];
+            
+            // Get standard methods
+            document.querySelectorAll('input[id^="method-"]:checked').forEach(checkbox => {
+                methods.push(checkbox.value);
+            });
+            
+            // Get custom methods
+            document.querySelectorAll('.custom-method-tag').forEach(tag => {
+                methods.push(tag.getAttribute('data-method-id'));
+            });
+            
+            return methods;
+        }
+
+        // Function to generate assignments
+        function generateAssignments(selectedDomains, selectedMethods, selectedLevels) {
+            // Filter assignments based on selected criteria
+            const filteredAssignments = assignmentIdeas.filter(assignment => {
+                const methodsMatch = assignment.teachingMethods.some(method => 
+                    selectedMethods.includes(method) || 
+                    selectedMethods.includes('custom-' + method)
+                );
+                
+                return (
+                    selectedDomains.includes(assignment.domain) &&
+                    methodsMatch &&
+                    selectedLevels.includes(assignment.level)
+                );
+            });
+            
+            // Update counters
+            assignmentCount.textContent = filteredAssignments.length;
+            const uniqueDomains = [...new Set(filteredAssignments.map(a => a.domain))];
+            domainCount.textContent = uniqueDomains.length;
+            
+            // Create domain filter buttons
+            domainFilter.innerHTML = '<button class="active" data-domain="all">All Domains</button>';
+            uniqueDomains.sort((a, b) => a - b).forEach(domain => {
+                const button = document.createElement('button');
+                button.setAttribute('data-domain', domain);
+                button.textContent = `Domain ${domain}`;
+                domainFilter.appendChild(button);
+            });
+            
+            // Add event listeners to filter buttons
+            document.querySelectorAll('#domain-filter button').forEach(button => {
+                button.addEventListener('click', () => {
+                    // Update active button
+                    document.querySelectorAll('#domain-filter button').forEach(btn => btn.classList.remove('active'));
+                    button.classList.add('active');
+                    
+                    // Filter assignments
+                    const domain = button.getAttribute('data-domain');
+                    displayAssignments(domain === 'all' ? filteredAssignments : filteredAssignments.filter(a => a.domain === parseInt(domain)));
+                });
+            });
+            
+            // Display all assignments initially
+            displayAssignments(filteredAssignments);
+        }
+
+        // Function to display assignments
+        function displayAssignments(assignments) {
+            assignmentsList.innerHTML = '';
+            
+            if (assignments.length === 0) {
+                assignmentsList.innerHTML = '<p>No assignments match your selected criteria. Try adjusting your filters.</p>';
+                return;
+            }
+            
+            assignments.forEach(assignment => {
+                const card = document.createElement('div');
+                card.className = 'assignment-card';
+                card.setAttribute('data-id', assignment.id);
+                
+                // Level badge class
+                let levelClass = '';
+                let levelText = '';
+                
+                switch(assignment.level) {
+                    case 'developing':
+                        levelClass = 'level-developing';
+                        levelText = 'Developing Competence';
+                        break;
+                    case 'transition':
+                        levelClass = 'level-transition';
+                        levelText = 'Developing to Developed';
+                        break;
+                    case 'developed':
+                        levelClass = 'level-developed';
+                        levelText = 'Developed Competence';
+                        break;
+                }
+                
+                // Create card content
+                card.innerHTML = `
+                    <input type="checkbox" class="select-checkbox" data-id="${assignment.id}">
+                    <div class="assignment-header">
+                        <div class="domain-badge">Domain ${assignment.domain}</div>
+                        <span class="competency-level ${levelClass}">${levelText}</span>
+                    </div>
+                    <h3 class="assignment-title">${assignment.title}</h3>
+                    <div class="competency-badges">
+                        ${assignment.subCompetencies.map(sub => `<span class="competency-badge">${sub}</span>`).join('')}
+                    </div>
+                    <div class="assignment-description expandable">
+                        <p>${assignment.description}</p>
+                        <div class="expandable-overlay"></div>
+                    </div>
+                    <button class="expand-btn">Read more <i class="fas fa-chevron-down"></i></button>
+                    <div class="learning-objectives">
+                        <h4>Learning Objectives:</h4>
+                        <ul>
+                            ${assignment.learningObjectives.map(obj => `<li>${obj}</li>`).join('')}
+                        </ul>
+                    </div>
+                    <div class="assignment-meta">
+                        <div class="meta-item">
+                            <i class="fas fa-clock"></i> ${assignment.timeRequired}
+                        </div>
+                        <div class="meta-item">
+                            <i class="fas fa-chalkboard-teacher"></i> ${assignment.teachingMethods.map(m => capitalizeFirstLetter(m)).join(', ')}
+                        </div>
+                        <div class="meta-item">
+                            <i class="fas fa-tasks"></i> ${assignment.assessmentApproach}
+                        </div>
+                    </div>
+                `;
+                
+                assignmentsList.appendChild(card);
+                
+                // Add event listener to expand button
+                const expandBtn = card.querySelector('.expand-btn');
+                const expandable = card.querySelector('.expandable');
+                
+                expandBtn.addEventListener('click', () => {
+                    expandable.classList.toggle('expanded');
+                    expandBtn.textContent = expandable.classList.contains('expanded') ? 'Read less ' : 'Read more ';
+                    
+                    // Add icon back
+                    const icon = document.createElement('i');
+                    icon.className = expandable.classList.contains('expanded') ? 'fas fa-chevron-up' : 'fas fa-chevron-down';
+                    expandBtn.appendChild(icon);
+                });
+                
+                // Add event listener to checkbox
+                const checkbox = card.querySelector('.select-checkbox');
+                checkbox.addEventListener('change', () => {
+                    updateRubricButtonVisibility();
+                });
+            });
+            
+            // Update rubric button visibility
+            updateRubricButtonVisibility();
+        }
+
+        // Function to update rubric button visibility
+        function updateRubricButtonVisibility() {
+            const checkboxes = document.querySelectorAll('.select-checkbox:checked');
+            
+            if (checkboxes.length > 0) {
+                generateRubricBtn.style.display = 'inline-block';
+            } else {
+                generateRubricBtn.style.display = 'none';
+            }
+        }
+
+        // Function to generate rubrics
+        function generateRubrics() {
+            const selectedIds = Array.from(document.querySelectorAll('.select-checkbox:checked')).map(checkbox => {
+                return parseInt(checkbox.getAttribute('data-id'));
+            });
+            
+            if (selectedIds.length === 0) {
+                alert("Please select at least one assignment to generate rubrics.");
+                return;
+            }
+            
+            const selectedAssignments = assignmentIdeas.filter(assignment => selectedIds.includes(assignment.id));
+            rubricContainer.innerHTML = '';
+            
+            selectedAssignments.forEach(assignment => {
+                const rubricDiv = document.createElement('div');
+                rubricDiv.className = 'rubric-section';
+                
+                // Generate rubric based on assignment
+                const rubricHTML = `
+                    <h3>${assignment.title} Rubric</h3>
+                    <p><strong>Domain ${assignment.domain}</strong> | ${assignment.level === 'developing' ? 'Developing Competence' : assignment.level === 'transition' ? 'Developing to Developed' : 'Developed Competence'}</p>
+                    <table class="rubric-table">
+                        <thead>
+                            <tr>
+                                <th>Criteria</th>
+                                <th>Exemplary</th>
+                                <th>Proficient</th>
+                                <th>Developing</th>
+                                <th>Needs Improvement</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${generateRubricRows(assignment)}
+                        </tbody>
+                    </table>
+                `;
+                
+                rubricDiv.innerHTML = rubricHTML;
+                rubricContainer.appendChild(rubricDiv);
+            });
+            
+            // Show the modal
+            rubricModal.style.display = 'block';
+        }
+
+        // Function to generate rubric rows
+        function generateRubricRows(assignment) {
+            let rows = '';
+            
+            // First row based on assignment competency level
+            rows += `
+                <tr>
+                    <td><strong>Understanding of ${assignment.domain === 1 ? 'Nursing Knowledge' : 
+                               assignment.domain === 2 ? 'Person-Centered Care' :
+                               assignment.domain === 3 ? 'Population Health' : 
+                               assignment.domain === 4 ? 'Nursing Scholarship' :
+                               assignment.domain === 5 ? 'Quality and Safety' :
+                               assignment.domain === 6 ? 'Interprofessional Partnerships' :
+                               assignment.domain === 7 ? 'Systems-Based Practice' :
+                               assignment.domain === 8 ? 'Informatics and Healthcare Technologies' :
+                               assignment.domain === 9 ? 'Professionalism' :
+                               'Professional Development'}</strong></td>
+                    <td>Demonstrates comprehensive understanding of domain concepts and applies them innovatively in complex situations.</td>
+                    <td>Consistently applies domain concepts correctly in various contexts with minimal guidance.</td>
+                    <td>Applies basic domain concepts in straightforward situations but may need guidance with complexity.</td>
+                    <td>Shows limited understanding of domain concepts and requires significant guidance.</td>
+                </tr>
+            `;
+            
+            // Rows based on learning objectives
+            assignment.learningObjectives.forEach(objective => {
+                const simplifiedObjective = objective.replace(/^(Demonstrate|Apply|Analyze|Evaluate|Create|Develop|Identify|Explain|Understand|Use|Integrate)/i, '').trim();
+                
+                rows += `
+                    <tr>
+                        <td><strong>${objective}</strong></td>
+                        <td>Exceeds expectations by demonstrating thorough and nuanced ${simplifiedObjective} with innovative approaches.</td>
+                        <td>Meets expectations by effectively ${simplifiedObjective} with consistent accuracy and independence.</td>
+                        <td>Partially meets expectations by attempting to ${simplifiedObjective} with occasional errors or requiring guidance.</td>
+                        <td>Does not meet expectations in ${simplifiedObjective}, showing significant gaps in understanding or application.</td>
+                    </tr>
+                `;
+            });
+            
+            // Add a row for overall assignment quality
+            rows += `
+                <tr>
+                    <td><strong>Overall Assignment Quality</strong></td>
+                    <td>Work is exceptionally well-developed, showing creativity, critical thinking, and mastery of concepts beyond course expectations.</td>
+                    <td>Work is complete, organized, and demonstrates solid understanding of all required concepts and skills.</td>
+                    <td>Work meets basic requirements but lacks depth, contains minor errors, or shows incomplete understanding.</td>
+                    <td>Work is incomplete, contains major errors, or demonstrates significant misunderstanding of core concepts.</td>
+                </tr>
+            `;
+            
+            return rows;
+        }
+
+        // Helper function to capitalize first letter
+        function capitalizeFirstLetter(string) {
+            return string.charAt(0).toUpperCase() + string.slice(1);
+        }
+    </script>
+</body>
+</html>
